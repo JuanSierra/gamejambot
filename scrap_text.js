@@ -2,7 +2,7 @@ var Xtractor = require('./xtractor.js');
 var Checker = require('./checker.js');
 var later = require('later');
 /*
-var xtractorSchedule = later.parse.recur().every(1).minute();
+var xtractorSchedule = later.parse.recur().every(5).minute();
 var xtractor = new Xtractor();
 var xtractorTimer = later.setInterval(function(){ xtractor.getData(); }, xtractorSchedule);
 */

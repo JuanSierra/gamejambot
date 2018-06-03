@@ -23,7 +23,13 @@ Poster.prototype.postJam = function() {
         }
       });
 */
-      console.log('posting: ' + jamToPost.name + ' :: ' + jamToPost.short )
+    var body = jamToPost.name + ' :: ' + jamToPost.short + '\n';
+    
+    fs.appendFile('dummy.txt', body, function (err) {
+        if (err) throw err;
+            console.log('Saved!');
+    });
+
     if (this.notifyQueue.length == 0)
         posterTimer.clear();
 };

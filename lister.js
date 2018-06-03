@@ -6,9 +6,6 @@ function Lister() {
     //this.baz = 'baz'; // default value
     this.jams = {};
     this.db = new Datastore({ filename: 'daba' });
-}
-
-Lister.prototype.open = function(){
     this.db.loadDatabase(function (err) {
         if(err)
             console.log('Ops. An error: ' + err);
@@ -27,13 +24,16 @@ Lister.prototype.insertJam = function(newJam) {
     var now = new Date();
     var hs = Math.abs(new Date(newJam.start) - now) / 36e5;
 
+    if(new Date(newJam.start) < now)
+        return;
+
     console.log(newJam.name + ' ' +hs+ ' hours')
     // 3 weeks
-    if(hs<504){
+    if(hs>72 && hs<=504){
         newJam.w3 = true;
     }
     // 3 days
-    if(hs<72){
+    if(hs>3 && hs<=72){
         newJam.d3 = true;
     }
 
@@ -72,23 +72,23 @@ Lister.prototype.updatePeriod = function(name, minHours){
 
 //PRE: if weeks is in false it doesnt have a notification at all
 
-Lister.prototype.getByWeeks = function() {
+Lister.prototype.getByWeeks = function(callb) {
     this.db.find({w3: false}, function (err, docs) {
-        return docs;
+        callb(docs);
     });
 }
 
 Lister.prototype.getByDays = function(callb) {
-    this.db.find({d3: false}, function (err, docs) {    
+    this.db.find({w3: true, d3: false}, function (err, docs) {    
         callb(docs);
     });
 
     console.log('what')
 }
 
-Lister.prototype.getByHours = function() {
-    this.db.find({h3: false}, function (err, docs) {
-        return docs;
+Lister.prototype.getByHours = function(callb) {
+    this.db.find({w3: true, d3: true, h3: false}, function (err, docs) {
+        callb(docs);
     });
 }
 
