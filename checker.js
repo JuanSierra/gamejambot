@@ -12,9 +12,10 @@ Checker.prototype.notify = function(jams, minHours){
     jams.forEach(element => {
         var now = new Date();
         var hs = Math.abs(new Date(element.start) - now) / 36e5;
-
+        console.log(hs +'<'+minHours);
         if(hs<minHours){
-            lister.updatePeriod(element.name, minHours);
+            console.log(element.name +' added')
+            lister.updatePeriod(element.name, minHours); 
             this.poster.notifyQueue.push(element);
         }
     });
@@ -24,21 +25,25 @@ Checker.prototype.nextWave = function(){
     var lister = new Lister();
     var that = this;
     
-    lister.getByDays(function(jams){ 
-        console.log(jams.length);
+    lister.getByHours(function(jams){ 
+        console.log('candidate jams: ' + jams.length);
+        that.notify(jams, 3);
 
-        that.notify(jams, 72);
+        console.log('checking hours ' + that.poster.notifyQueue.length);
+        lister.getByDays(function(jams){ 
+            console.log('candidate jams: ' + jams.length);
+            that.notify(jams, 72);
 
-        console.log('checking days ' + that.poster.notifyQueue.length);
-       
-        lister.getByWeeks(function(jams){ 
-            console.log(jams.length);
-    
-            that.notify(jams, 504);
-    
-            console.log('checking weeks ' + that.poster.notifyQueue.length);
-            if(that.poster.notifyQueue.length>0)
-                that.poster.postQueue();
+            console.log('checking days ' + that.poster.notifyQueue.length);
+        
+            lister.getByWeeks(function(jams){ 
+                console.log('candidate jams: ' + jams.length);
+                that.notify(jams, 504);
+        
+                console.log('checking weeks ' + that.poster.notifyQueue.length);
+                if(that.poster.notifyQueue.length>0)
+                    that.poster.postQueue();
+            });
         });
     });
 }

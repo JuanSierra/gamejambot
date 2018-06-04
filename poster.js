@@ -4,7 +4,7 @@ var fs = require('fs')
 var secret = JSON.parse( fs.readFileSync('./secret', 'utf8') ); //require("./secret");
 var later = require('later');
 
-var posterSchedule = later.parse.recur().every(1).minute();
+var posterSchedule = later.parse.recur().every(2).minute();
 var posterTimer;
 var Twitter = new TwitterPackage(secret);
 
@@ -22,8 +22,16 @@ Poster.prototype.postJam = function() {
           console.log(error);
         }
       });
-*/
-    var body = jamToPost.name + ' :: ' + jamToPost.short + '\n';
+    */
+    var unit; 
+    if(!jamToPost.w3)
+      unit = " weeks";
+    else if(!jamToPost.w3)
+      unit = " days";
+    else(!jamToPost.w3)
+      unit = " hours";
+    
+    var body = new Date() + ' :: ' + jamToPost.name + ' :: ' + jamToPost.short + ' WHEN: < 3 ' + unit + '\n';
     
     fs.appendFile('dummy.txt', body, function (err) {
         if (err) throw err;
@@ -36,7 +44,7 @@ Poster.prototype.postJam = function() {
 
 Poster.prototype.postQueue = function(){
     var that = this;
-    posterTimer = later.setInterval(    function(){that.postJam(); }, posterSchedule);
+    posterTimer = later.setInterval(    function(){ that.postJam(); }, posterSchedule);
 }
 
 module.exports = Poster;

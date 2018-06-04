@@ -43,8 +43,7 @@ Xtractor.prototype.getData = function(){
     function callb (){
         var name, start, end, short;
         var lister = new Lister();
-        lister.open();
-
+        
         that.parsedResults.forEach(function(element){
             request('https://itch.io' + element.url, function (error, response, html) {
                 //console.log('https://itch.io' + element.url)

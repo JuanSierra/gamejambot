@@ -2,8 +2,6 @@ var Datastore = require('nedb');
 var Jam = require('./jam.js');
 
 function Lister() {
-    //this.bar = bar;
-    //this.baz = 'baz'; // default value
     this.jams = {};
     this.db = new Datastore({ filename: 'daba' });
     this.db.loadDatabase(function (err) {
@@ -82,8 +80,6 @@ Lister.prototype.getByDays = function(callb) {
     this.db.find({w3: true, d3: false}, function (err, docs) {    
         callb(docs);
     });
-
-    console.log('what')
 }
 
 Lister.prototype.getByHours = function(callb) {
