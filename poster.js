@@ -8,13 +8,15 @@ var posterSchedule = later.parse.recur().every(2).minute();
 var posterTimer;
 var Twitter = new TwitterPackage(secret);
 
-function Poster(bar) {
-    this.bar = bar;
-    this.baz = 'baz'; // default value
+function Poster() {
     this.notifyQueue = [];
 }
 
 Poster.prototype.postJam = function() {
+    if (this.notifyQueue.length == 0){
+      posterTimer.clear();
+      return;
+    }
     var jamToPost = this.notifyQueue.pop();
 
     /*Twitter.post('statuses/update', {status: jamToPost.short},  function(error, tweet, response){
@@ -24,22 +26,20 @@ Poster.prototype.postJam = function() {
       });
     */
     var unit; 
+
+    // recent time period is already in true
     if(!jamToPost.w3)
       unit = " weeks";
-    else if(!jamToPost.w3)
+    else if(!jamToPost.d3)
       unit = " days";
-    else(!jamToPost.w3)
+    else
       unit = " hours";
     
     var body = new Date() + ' :: ' + jamToPost.name + ' :: ' + jamToPost.short + ' WHEN: < 3 ' + unit + '\n';
-    
     fs.appendFile('dummy.txt', body, function (err) {
         if (err) throw err;
             console.log('Saved!');
     });
-
-    if (this.notifyQueue.length == 0)
-        posterTimer.clear();
 };
 
 Poster.prototype.postQueue = function(){

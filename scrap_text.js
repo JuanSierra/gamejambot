@@ -2,11 +2,14 @@ var Xtractor = require('./xtractor.js');
 var Checker = require('./checker.js');
 var later = require('later');
 
-var xtractorSchedule = later.parse.recur().every(24).hour();
+
+
+var xtractorSchedule = later.parse.recur().every(5).minute();
 var xtractor = new Xtractor();
 var xtractorTimer = later.setInterval(function(){ xtractor.getData(); }, xtractorSchedule);
 
-var checkerSchedule = later.parse.recur().every(6).hour();
+
+var checkerSchedule = later.parse.recur().every(1).minute();
 var checker = new Checker();
 var checkerTimer = later.setInterval(function(){checker.nextWave();}, checkerSchedule);
 

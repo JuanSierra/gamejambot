@@ -4,39 +4,38 @@ var Poster = require('./poster.js');
 function Checker() {
     this.jams = {};
     this.poster = new Poster();
+    this.lister = null;
 }
 
 Checker.prototype.notify = function(jams, minHours){
-    var lister = new Lister();
-
     jams.forEach(element => {
         var now = new Date();
         var hs = Math.abs(new Date(element.start) - now) / 36e5;
         console.log(hs +'<'+minHours);
         if(hs<minHours){
-            console.log(element.name +' added')
-            lister.updatePeriod(element.name, minHours); 
-            this.poster.notifyQueue.push(element);
+            var that = this;
+            this.lister.updatePeriod(element.name, minHours, function(){
+                that.poster.notifyQueue.push(element);
+            }); 
         }
     });
 }
 
 Checker.prototype.nextWave = function(){
-    var lister = new Lister();
+    this.lister = new Lister();
     var that = this;
-    
-    lister.getByHours(function(jams){ 
+
+    this.lister.getByHours(function(jams){ 
         console.log('candidate jams: ' + jams.length);
         that.notify(jams, 3);
 
         console.log('checking hours ' + that.poster.notifyQueue.length);
-        lister.getByDays(function(jams){ 
+        that.lister.getByDays(function(jams){ 
             console.log('candidate jams: ' + jams.length);
             that.notify(jams, 72);
 
             console.log('checking days ' + that.poster.notifyQueue.length);
-        
-            lister.getByWeeks(function(jams){ 
+            that.lister.getByWeeks(function(jams){ 
                 console.log('candidate jams: ' + jams.length);
                 that.notify(jams, 504);
         

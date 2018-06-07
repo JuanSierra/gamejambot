@@ -23,7 +23,7 @@ Xtractor.prototype.getData = function(){
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
     
-            $('.jam_cell span a').each( function(i, element){
+            $('.jam_cell span a').each( function(i, element) {
                 var t = $(this).text();
                 var url = $(this).attr('href');
 
@@ -42,8 +42,7 @@ Xtractor.prototype.getData = function(){
 
     function callb (){
         var name, start, end, short;
-        var lister = new Lister();
-        
+
         that.parsedResults.forEach(function(element){
             request('https://itch.io' + element.url, function (error, response, html) {
                 //console.log('https://itch.io' + element.url)
@@ -64,8 +63,9 @@ Xtractor.prototype.getData = function(){
                                 short = data.body.substring(0, 100);
                             }
                         });
-
-                        lister.insertJam( new Jam(
+                        
+                        //lister = new Lister();
+                        that.lister.insertJam( new Jam(
                             {
                                 name : name,
                                 start : start,
