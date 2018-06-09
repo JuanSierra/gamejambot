@@ -16,14 +16,15 @@ fs.open(dbfile,'r',function(err, fd){
             console.log(err);
         }
         console.log("The file was saved!");
+        // Initial fill
+        xtractor.getData();
     });
   } else {
     console.log("The file exists!");
+    // Initial fill
+    xtractor.getData();
   }
 });
-
-// Initial fill
-xtractor.getData();
 
 var checkerSchedule = later.parse.recur().every(6).hour();
 var checker = new Checker();
