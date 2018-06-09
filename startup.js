@@ -1,6 +1,7 @@
 var Xtractor = require('./xtractor.js');
 var Checker = require('./checker.js');
 var later = require('later');
+var fs = require('fs');
 
 var xtractorSchedule = later.parse.recur().every(24).hour();
 var xtractor = new Xtractor();
