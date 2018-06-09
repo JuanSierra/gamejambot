@@ -1,12 +1,12 @@
 var TwitterPackage = require('twitter');
 //http://techknights.org/workshops/nodejs-twitterbot/
 var fs = require('fs')
-var secret = JSON.parse( fs.readFileSync('./secret', 'utf8') ); //require("./secret");
+//var secret = JSON.parse( fs.readFileSync('./secret', 'utf8') );
 var later = require('later');
 
 var posterSchedule = later.parse.recur().every(2).minute();
 var posterTimer;
-var Twitter = new TwitterPackage(secret);
+//var Twitter = new TwitterPackage(secret);
 
 function Poster() {
     this.notifyQueue = [];
