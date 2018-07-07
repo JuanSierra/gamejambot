@@ -1,5 +1,6 @@
-var Lister = require('./lister.js');
-var Poster = require('./poster.js');
+var Lister = require('./lister');
+var Poster = require('./poster');
+var winston = require('winston');
 
 function Checker() {
     this.jams = {};
@@ -22,29 +23,33 @@ Checker.prototype.notify = function(jams, minHours){
 }
 
 Checker.prototype.nextWave = function(){
-    this.lister = new Lister();
-    var that = this;
+    try {
+        this.lister = new Lister();
+        var that = this;
 
-    this.lister.getByHours(function(jams){ 
-        console.log('candidate jams: ' + jams.length);
-        that.notify(jams, 3);
-
-        console.log('checking hours ' + that.poster.notifyQueue.length);
-        that.lister.getByDays(function(jams){ 
+        this.lister.getByHours(function(jams){ 
             console.log('candidate jams: ' + jams.length);
-            that.notify(jams, 72);
+            that.notify(jams, 3);
 
-            console.log('checking days ' + that.poster.notifyQueue.length);
-            that.lister.getByWeeks(function(jams){ 
+            console.log('checking hours ' + that.poster.notifyQueue.length);
+            that.lister.getByDays(function(jams){ 
                 console.log('candidate jams: ' + jams.length);
-                that.notify(jams, 504);
-        
-                console.log('checking weeks ' + that.poster.notifyQueue.length);
-                if(that.poster.notifyQueue.length>0)
-                    that.poster.postQueue();
+                that.notify(jams, 72);
+
+                console.log('checking days ' + that.poster.notifyQueue.length);
+                that.lister.getByWeeks(function(jams){ 
+                    console.log('candidate jams: ' + jams.length);
+                    that.notify(jams, 504);
+            
+                    console.log('checking weeks ' + that.poster.notifyQueue.length);
+                    if(that.poster.notifyQueue.length>0)
+                        that.poster.postQueue();
+                });
             });
         });
-    });
+    } catch (error) {
+        winston.error(error);
+    }
 }
 
 module.exports = Checker;

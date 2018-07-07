@@ -1,5 +1,5 @@
 var Datastore = require('nedb');
-var Jam = require('./jam.js');
+var Jam = require('./jam');
 
 function Lister() {
     this.jams = {};

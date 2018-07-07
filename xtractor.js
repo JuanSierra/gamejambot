@@ -3,12 +3,13 @@ const BODY_CLOSE = '</body></html>';
 
 var request = require('request');
 var cheerio = require('cheerio');
-var Jam = require('./jam.js');
+var Jam = require('./jam');
 
 var Extrator = require("html-extractor");
+var winston = require('winston');
 var myExtrator = new Extrator();
 
-var Lister = require('./lister.js');
+var Lister = require('./lister');
 
 function Xtractor() {
     this.parsedResults = [];
@@ -20,6 +21,9 @@ Xtractor.prototype.getData = function(){
     console.log('Getting data...');
 
     request('https://itch.io/jams', function (error, response, html) {
+        if(error)
+            winston.error(error);
+
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
     
@@ -46,6 +50,9 @@ Xtractor.prototype.getData = function(){
         that.parsedResults.forEach(function(element){
             request('https://itch.io' + element.url, function (error, response, html) {
                 //console.log('https://itch.io' + element.url)
+                if(error)
+                    winston.error(error);
+                
                 if (!error && response.statusCode == 200) {
                     var $ = cheerio.load(html);
                     var dates = $('span.date_format');

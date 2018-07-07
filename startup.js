@@ -1,5 +1,8 @@
-var Xtractor = require('./xtractor.js');
-var Checker = require('./checker.js');
+var winston = require('winston');
+var logger = require('./logger');   
+
+var Xtractor = require('./xtractor');
+var Checker = require('./checker');
 var later = require('later');
 var fs = require('fs');
 
@@ -31,6 +34,9 @@ var checker = new Checker();
 var checkerTimer = later.setInterval(function(){checker.nextWave();}, checkerSchedule);
 
 function exitHandler(options, err) {
+  if(err)
+    winston.error(err);
+
   if(xtractorTimer)
     xtractorTimer.clear();
 
