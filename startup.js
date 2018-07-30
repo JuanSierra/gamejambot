@@ -16,14 +16,14 @@ fs.open(dbfile,'r',function(err, fd){
   if (err) {
     fs.writeFile(dbfile, '', function(err) {
         if(err) {
-            console.log(err);
+          winston.debug(err);
         }
-        console.log("The file was saved!");
+        winston.debug("The file was saved!");
         // Initial fill
         xtractor.getData();
     });
   } else {
-    console.log("The file exists!");
+    winston.debug("The file exists!");
     // Initial fill
     xtractor.getData();
   }

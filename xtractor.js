@@ -18,7 +18,7 @@ function Xtractor() {
 
 Xtractor.prototype.getData = function(){
     var that = this;
-    console.log('Getting data...');
+    winston.debug('Getting data...');
 
     request('https://itch.io/jams', function (error, response, html) {
         if(error)
