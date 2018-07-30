@@ -7,6 +7,7 @@ var Jam = require('./jam');
 
 var Extrator = require("html-extractor");
 var winston = require('winston');
+var logger = require('./logger');
 var myExtrator = new Extrator();
 
 var Lister = require('./lister');

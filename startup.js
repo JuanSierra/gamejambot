@@ -1,6 +1,6 @@
 var winston = require('winston');
-var logger = require('./logger');   
-
+var logger = require('./logger');
+   
 var Xtractor = require('./xtractor');
 var Checker = require('./checker');
 var later = require('later');

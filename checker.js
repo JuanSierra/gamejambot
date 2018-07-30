@@ -1,6 +1,7 @@
 var Lister = require('./lister');
 var Poster = require('./poster');
 var winston = require('winston');
+var logger = require('./logger');
 
 function Checker() {
     this.jams = {};
