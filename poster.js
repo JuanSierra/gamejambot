@@ -7,6 +7,7 @@ var later = require('later');
 var posterSchedule = later.parse.recur().every(2).minute();
 var posterTimer;
 //var Twitter = new TwitterPackage(secret);
+var logger = require('./logger');
 
 function Poster() {
     this.notifyQueue = [];
@@ -38,7 +39,7 @@ Poster.prototype.postJam = function() {
     var body = new Date() + ' :: ' + jamToPost.name + ' :: ' + jamToPost.short + ' WHEN: < 3 ' + unit + '\n';
     fs.appendFile('dummy.txt', body, function (err) {
         if (err) throw err;
-            console.log('Saved!');
+            logger.debug('Saved!');
     });
 };
 

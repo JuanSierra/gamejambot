@@ -1,13 +1,11 @@
-var winston = require('winston');
 var logger = require('./logger');
-   
 var Xtractor = require('./xtractor');
 var Checker = require('./checker');
 var later = require('later');
 var fs = require('fs');
 
-var xtractorSchedule = later.parse.recur().every(24).hour();
-var xtractor = new Xtractor();
+var xtractorSchedule = later.parse.recur().every(5).minute(); //.every(24).hour();
+var xtractor = new Xtractor(logger);
 var xtractorTimer = later.setInterval(function(){ xtractor.getData(); }, xtractorSchedule);
 var dbfile = 'daba';
 
@@ -16,26 +14,26 @@ fs.open(dbfile,'r',function(err, fd){
   if (err) {
     fs.writeFile(dbfile, '', function(err) {
         if(err) {
-          winston.debug(err);
+          logger.debug(err);
         }
-        winston.debug("The file was saved!");
+        logger.debug("The file was saved!");
         // Initial fill
         xtractor.getData();
     });
   } else {
-    winston.debug("The file exists!");
+    logger.debug("The file exists!");
     // Initial fill
     xtractor.getData();
   }
 });
 
-var checkerSchedule = later.parse.recur().every(6).hour();
-var checker = new Checker();
+var checkerSchedule = later.parse.recur().every(1).minute(); //.every(6).hour();
+var checker = new Checker(logger);
 var checkerTimer = later.setInterval(function(){checker.nextWave();}, checkerSchedule);
 
 function exitHandler(options, err) {
   if(err)
-    winston.error(err);
+    logger.error(err);
 
   if(xtractorTimer)
     xtractorTimer.clear();

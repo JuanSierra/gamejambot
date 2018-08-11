@@ -1,9 +1,10 @@
 var Datastore = require('nedb');
 var Jam = require('./jam');
 
-function Lister() {
+function Lister(logger) {
     this.jams = {};
     this.db = new Datastore({ filename: 'daba', autoload: true });
+    this.logger = logger;
 }
 
 Lister.prototype.insertJam = function(newJam) {
@@ -11,7 +12,7 @@ Lister.prototype.insertJam = function(newJam) {
 
     this.db.find({ name: newJam.name }, function (err, docs) {
         if(docs.length>0){
-            console.log('Found '+ newJam.name + ' already');    
+            that.logger.debug('Found '+ newJam.name + ' already');    
             return null;
         }
         
@@ -22,7 +23,7 @@ Lister.prototype.insertJam = function(newJam) {
         if(new Date(newJam.start) < now)
             return;
 
-        console.log(newJam.name + ' ' +hs+ ' hours')
+        that.logger.debug(newJam.name + ' ' +hs+ ' hours')
         // 3 weeks
         if(hs<=504){
             newJam.w3 = true;
@@ -34,14 +35,14 @@ Lister.prototype.insertJam = function(newJam) {
 
         that.db.insert(newJam, function (err) {
             if(err)
-                console.log('Error inserting ' + newJam.name + ' : ' + err);
+                that.logger.debug('Error inserting ' + newJam.name + ' : ' + err);
         });
     });
 };
 
 Lister.prototype.read = function() {
     this.db.loadDatabase(function (err) {
-        console.log('Ops. An error: ' + err);
+        that.logger.debug('Ops. An error: ' + err);
     });
 
     var that = this;

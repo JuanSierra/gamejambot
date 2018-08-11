@@ -6,24 +6,23 @@ var cheerio = require('cheerio');
 var Jam = require('./jam');
 
 var Extrator = require("html-extractor");
-var winston = require('winston');
-var logger = require('./logger');
 var myExtrator = new Extrator();
 
 var Lister = require('./lister');
 
-function Xtractor() {
+function Xtractor(logger) {
     this.parsedResults = [];
-    this.lister = new Lister();
+    this.lister = new Lister(logger);
+    this.logger = logger;
 }
 
 Xtractor.prototype.getData = function(){
     var that = this;
-    winston.debug('Getting data...');
+    this.logger.debug('Getting data...');
 
     request('https://itch.io/jams', function (error, response, html) {
         if(error)
-            winston.error(error);
+            that.logger.error(error);
 
         if (!error && response.statusCode == 200) {
             var $ = cheerio.load(html);
@@ -52,7 +51,7 @@ Xtractor.prototype.getData = function(){
             request('https://itch.io' + element.url, function (error, response, html) {
                 //console.log('https://itch.io' + element.url)
                 if(error)
-                    winston.error(error);
+                    that.logger.error(error);
                 
                 if (!error && response.statusCode == 200) {
                     var $ = cheerio.load(html);
