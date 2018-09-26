@@ -4,7 +4,7 @@ var fs = require('fs')
 //var secret = JSON.parse( fs.readFileSync('./secret', 'utf8') );
 var later = require('later');
 
-var posterSchedule = later.parse.recur().every(2).minute();
+var posterSchedule = later.parse.recur().every(5).minute();
 var posterTimer;
 //var Twitter = new TwitterPackage(secret);
 var logger = require('./logger');
@@ -45,7 +45,13 @@ Poster.prototype.postJam = function() {
 
 Poster.prototype.postQueue = function(){
     var that = this;
-    posterTimer = later.setInterval(    function(){ that.postJam(); }, posterSchedule);
+    posterTimer = later.setInterval(    function(){ 
+      try{
+        that.postJam(); 
+      }catch(e){
+        logger.error(e);
+      }
+    }, posterSchedule);
 }
 
 module.exports = Poster;
