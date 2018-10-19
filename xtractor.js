@@ -41,6 +41,8 @@ Xtractor.prototype.getData = function(){
             });
         }
 
+        that.cleanJamResults();
+
         return callb();
     });
 
@@ -85,6 +87,24 @@ Xtractor.prototype.getData = function(){
             });
         });
     }
+}
+
+Xtractor.prototype.cleanJamResults = function(){
+    var keys = [];
+    var filteredResults = [];
+    this.logger.debug('Results: ' + this.parsedResults.length);
+
+    for (var i in this.parsedResults){
+        if(keys.indexOf(this.parsedResults[i].name) == -1){
+            keys.push(this.parsedResults[i].name);
+            filteredResults.push(this.parsedResults[i]);
+        }
+    }
+
+    //TODO: Filter Ignored
+
+    this.parsedResults = filteredResults;
+    this.logger.debug('Filtered results: ' + this.parsedResults.length);
 }
 
 module.exports = Xtractor;
